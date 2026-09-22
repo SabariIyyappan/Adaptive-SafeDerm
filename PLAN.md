@@ -11,6 +11,16 @@
 
 ---
 
+## Status (updated 2026-09-22)
+
+**V1 — Member A: code done, PR open for review.** PR: https://github.com/SabariIyyappan/Adaptive-SafeDerm/pull/1 (`member-a-v1` → `second-main`)
+
+- Done: C1 label map, acquisition script (Kaggle primary, Harvard Dataverse fallback), integrity audit, the lesion-grouped dx-stratified 70/15/15 split (C2), split verification, EDA figures, and the architecture figure (paper Figure 1 equivalent). All unit-tested against a synthetic HAM10000-shaped fixture — 16/16 tests passing (zero lesion/image leakage, full split coverage, every class present in every split).
+- **Not yet done:** the real HAM10000 dataset hasn't been downloaded and run through the pipeline. Whoever has a working Kaggle account / internet access needs to run the one-line acquisition command in `data/README.md` to produce the *real* frozen C2 split — that's what B and C actually need for real training and evaluation.
+- B and C can start building against dummy/fixture data now (per the dummy-first rule, §4.4) so they're not blocked, but should hold off on real training/evaluation runs until the real C2 split is published.
+
+---
+
 ## 0. How this plan is organized
 
 The replication is split into **5 versions**. Each version ends in a *complete, presentable result package*: a working pipeline, trained or evaluated artifacts, figures, tables and metrics. No version ends at "preprocessing done".
@@ -114,7 +124,7 @@ Roles stay **fixed across all versions**, so nobody has to re-learn a different 
 - Access to one shared storage location (Google Drive folder or a private Kaggle dataset) for splits, caches, checkpoints and prediction files.
 - Access to the shared Git repository.
 
-> **Fill in before starting:** A = ________ · B = ________ · C = ________
+> **Fill in before starting:** A = Soumya · B = ________ · C = ________
 
 ---
 
