@@ -1,0 +1,19 @@
+# Dataset and derived caches — never in git (PLAN.md §4.1)
+data/raw/
+data/cache_raw224/
+data/cache_prep224/
+data/masks224/
+
+# Checkpoints and per-run predictions — never in git (PLAN.md §4.1)
+runs/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
