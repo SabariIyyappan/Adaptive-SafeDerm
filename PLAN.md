@@ -19,6 +19,11 @@
 - **Not yet done:** the real HAM10000 dataset hasn't been downloaded and run through the pipeline. Whoever has a working Kaggle account / internet access needs to run the one-line acquisition command in `data/README.md` to produce the *real* frozen C2 split — that's what B and C actually need for real training and evaluation.
 - B and C can start building against dummy/fixture data now (per the dummy-first rule, §4.4) so they're not blocked, but should hold off on real training/evaluation runs until the real C2 split is published.
 
+**V1 — Member B: code done, built and unit-tested against A's real C2 split format and the synthetic fixture (dummy-first rule).**
+
+- Done: `env/requirements.txt` (shared pinned spec), the data pipeline (resize + train-only augmentation + ImageNet normalization, `src/model/dataset.py`), the EfficientNet-B0 + 256-unit dropout head model (`src/model/model.py`), dual imbalance correction — WeightedRandomSampler and class-weighted cross-entropy (`src/model/imbalance.py`), the training loop with per-epoch history (C5), checkpointing (C6) and cosine LR (`src/model/train.py`), and single-pass C3 prediction export (`src/model/predict.py`). Provisional Table-2 hyperparameters are pinned in `configs/v1-b0-baseline.yaml` and logged in `docs/deviations.md`. A 2-epoch smoke run on the fixture confirms the full loop (train → checkpoint → history → predict) works end-to-end.
+- **Not yet done:** the real `v1-b0-baseline` 30-epoch run — blocked on the real C2 split (A) and a GPU session (P-GPU-S). Once both are available: `python -m src.model.train --split-dir data/splits --images-dir data/raw/images --config configs/v1-b0-baseline.yaml --out-dir runs/v1-b0-baseline`, then `src/model/predict.py` for val/test, then a run-registry entry.
+
 ---
 
 ## 0. How this plan is organized

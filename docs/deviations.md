@@ -13,7 +13,14 @@ Format: one entry per deviation, added by whoever makes the call (PLAN.md §4.5)
 ### V1 — Provisional Table 2 hyperparameters
 **Section:** §4.1 / PLAN.md §5.3, Table 2 (TBD — see PLAN.md §14)
 **What:** Paper Table 2 (optimizer, LR, batch size, weight decay, cosine schedule parameters) was not readable in the text version of the paper.
-**What we did:** Not yet applicable to Member A's scope (owned by Member B — PLAN.md §5.3 Member B task 5). Logged here as a placeholder pointer; B's actual provisional values (AdamW, LR 1e-4, WD 1e-4, batch 32) belong in this file once B's training code lands.
+**What we did:** Used the plan's provisional defaults, pinned in `configs/v1-b0-baseline.yaml`: AdamW, LR 1e-4, weight decay 1e-4, batch size 32, cosine annealing with `T_max=30` (no warm restarts), 30 epochs, no early stopping, seed 42. These will be replaced with the exact Table 2 values in V2 once the paper PDF is available.
+**Why:** PLAN.md §5.3.5 explicitly calls for provisional defaults here rather than blocking V1 on the missing table.
+
+### V1 — Model/training code developed and unit-tested without the real dataset or a GPU
+**Section:** §3.3, §3.2.5 / PLAN.md §5.3 Member B tasks
+**What:** `src/model/` (dataset, model, imbalance correction, training loop, prediction export) was written and validated in an environment with a CPU-only PyTorch install and no real HAM10000 images — the same constraint Member A's environment had (see the dataset-acquisition deviation below).
+**What we did:** Built and unit-tested every component — dataset loading against A's real C2 split format, the EfficientNet-B0 + dropout head architecture, the class-weight and WeightedRandomSampler formulas, and a full 2-epoch training + checkpointing + C3-export run — against the same synthetic HAM10000-shaped fixture Member A's tests use (`tests/fixtures.py`). The actual 30-epoch `v1-b0-baseline` run on the real 10,015-image dataset still needs to happen on a machine with a GPU and the real C2 split (P-GPU-S, per PLAN.md §3).
+**Why:** Per the plan's "dummy-first" rule (§4.4), so the training/export logic is verified correct independent of when the real split and a GPU session are available.
 
 ### V1 — Real dataset not yet acquired in this environment
 **Section:** §3.1 / PLAN.md §5.3.1
