@@ -11,18 +11,19 @@
 
 ---
 
-## Status (updated 2026-09-22)
+## Status (updated 2026-09-23)
 
-**V1 — Member A: code done, PR open for review.** PR: https://github.com/SabariIyyappan/Adaptive-SafeDerm/pull/1 (`member-a-v1` → `second-main`)
+**V1 — Member A: done.** Real HAM10000 acquired and full pipeline run. PR: https://github.com/SabariIyyappan/Adaptive-SafeDerm/pull/1 (`member-a-v1` → `second-main`, merged)
 
-- Done: C1 label map, acquisition script (Kaggle primary, Harvard Dataverse fallback), integrity audit, the lesion-grouped dx-stratified 70/15/15 split (C2), split verification, EDA figures, and the architecture figure (paper Figure 1 equivalent). All unit-tested against a synthetic HAM10000-shaped fixture — 16/16 tests passing (zero lesion/image leakage, full split coverage, every class present in every split).
-- **Not yet done:** the real HAM10000 dataset hasn't been downloaded and run through the pipeline. Whoever has a working Kaggle account / internet access needs to run the one-line acquisition command in `data/README.md` to produce the *real* frozen C2 split — that's what B and C actually need for real training and evaluation.
-- B and C can start building against dummy/fixture data now (per the dummy-first rule, §4.4) so they're not blocked, but should hold off on real training/evaluation runs until the real C2 split is published.
+- Done: C1 label map, acquisition script (Kaggle primary, Harvard Dataverse fallback), integrity audit, the lesion-grouped dx-stratified 70/15/15 split (C2), split verification, EDA figures, and the architecture figure (paper Figure 1 equivalent). All unit-tested against a synthetic HAM10000-shaped fixture — 16/16 tests passing.
+- **Real dataset acquired and run:** the real 10,015-image HAM10000 dataset was downloaded via `src.data.acquire --source kaggle` and run through the full pipeline. Integrity audit **PASS** (exact match: 10,015 images, 7,470 lesions, class counts identical to the paper's reported distribution). Split verification **PASS** (zero lesion/image leakage, every class present in every split). The real, frozen C2 split is committed at `data/splits/{train,val,test}.csv` (7002/1532/1481 images). EDA outputs at `results/v1/eda/`.
+- **Done when checklist:** all met — split files pass every verification check against the real dataset, B has confirmed the real split loads and trains correctly.
 
 **V1 — Member B: done.** Real `v1-b0-baseline` trained on the real HAM10000 dataset; see `docs/run_registry.md`.
 
 - Done: `env/requirements.txt` (shared pinned spec), the data pipeline (resize + train-only augmentation + ImageNet normalization, `src/model/dataset.py`), the EfficientNet-B0 + 256-unit dropout head model (`src/model/model.py`), dual imbalance correction — WeightedRandomSampler and class-weighted cross-entropy (`src/model/imbalance.py`), the training loop with per-epoch history (C5), checkpointing (C6) and cosine LR (`src/model/train.py`), and single-pass C3 prediction export (`src/model/predict.py`). Provisional Table-2 hyperparameters are pinned in `configs/v1-b0-baseline.yaml` and logged in `docs/deviations.md`.
-- **Real run complete:** A acquired the real 10,015-image HAM10000 dataset and ran her full pipeline (integrity audit → split → verify → EDA) in this session — all checks passed, frozen C2 split at `data/splits/`. B then trained `v1-b0-baseline` for the full 30 epochs on that real split (RTX 3060 laptop GPU, ~35 min) and exported C3 predictions for val and test. Results: best epoch 30/30, val macro F1 0.5839, val macro AUROC 0.9233 (single-pass, no preprocessing — see `docs/run_registry.md` for why this isn't directly comparable to the paper's final T=50 numbers). All four of §5.3's "done when" checks pass: 30-row history, prediction counts match split sizes, probabilities sum to 1, all 7 classes present.
+- **Real run complete:** `v1-b0-baseline` trained for the full 30 epochs on the real split (RTX 3060 laptop GPU, 6GB VRAM, ~35 min) and exported C3 predictions for val and test. Results: best epoch 30/30, val macro F1 0.5839, val macro AUROC 0.9233 (single-pass, no preprocessing — see `docs/run_registry.md` for why this isn't directly comparable to the paper's final T=50 numbers). All four of §5.3's "done when" checks pass: 30-row history, prediction counts match split sizes, probabilities sum to 1, all 7 classes present.
+- **Handoff to C:** see `results/v1/member_b_handoff.md` for exactly what to consume and how.
 - **Next:** Member C runs the evaluation suite on `runs/v1-b0-baseline/predictions_{val,test}.csv` to produce `results/v1/` figures, tables and `metrics.json` for the deck.
 
 ---
