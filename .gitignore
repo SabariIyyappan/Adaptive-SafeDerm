@@ -5,7 +5,14 @@ data/cache_prep224/
 data/masks224/
 
 # Checkpoints and per-run predictions — never in git (PLAN.md §4.1)
+# NOTE: the small C3/C5/C6 artifacts the eval suite consumes are copied to
+# results/v1/inputs/ and ARE committed, so results regenerate from a clean
+# clone with no dataset or GPU (PLAN.md §12).
 runs/
+
+# Per-image EDA statistics — regenerated from data/raw by `python -m src.eval.eda`.
+# 1.9 MB of derived numbers; the figures and data_report.md carry the findings.
+results/*/eda/image_stats.csv
 
 # Python
 __pycache__/

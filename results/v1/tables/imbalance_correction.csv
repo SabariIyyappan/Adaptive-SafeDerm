@@ -1,0 +1,8 @@
+Class,Train images,Raw share %,Sampler boost,Loss weight w_c,"Combined, relative to nv"
+Actinic keratosis (akiec),230,3.28,4.35x,0.1312,414x
+Basal cell carcinoma (bcc),366,5.23,2.73x,0.0825,163x
+Benign keratosis (bkl),774,11.05,1.29x,0.039,37x
+Dermatofibroma (df),76,1.09,13.16x,0.3972,"3,790x"
+Melanoma (mel),778,11.11,1.29x,0.0388,36x
+Melanocytic nevus (nv),4679,66.82,0.21x,0.0065,1x
+Vascular lesion (vasc),99,1.41,10.10x,0.3049,"2,234x"
