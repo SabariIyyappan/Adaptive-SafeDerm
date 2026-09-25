@@ -23,8 +23,18 @@
 
 - Done: `env/requirements.txt` (shared pinned spec), the data pipeline (resize + train-only augmentation + ImageNet normalization, `src/model/dataset.py`), the EfficientNet-B0 + 256-unit dropout head model (`src/model/model.py`), dual imbalance correction — WeightedRandomSampler and class-weighted cross-entropy (`src/model/imbalance.py`), the training loop with per-epoch history (C5), checkpointing (C6) and cosine LR (`src/model/train.py`), and single-pass C3 prediction export (`src/model/predict.py`). Provisional Table-2 hyperparameters are pinned in `configs/v1-b0-baseline.yaml` and logged in `docs/deviations.md`.
 - **Real run complete:** `v1-b0-baseline` trained for the full 30 epochs on the real split (RTX 3060 laptop GPU, 6GB VRAM, ~35 min) and exported C3 predictions for val and test. Results: best epoch 30/30, val macro F1 0.5839, val macro AUROC 0.9233 (single-pass, no preprocessing — see `docs/run_registry.md` for why this isn't directly comparable to the paper's final T=50 numbers). All four of §5.3's "done when" checks pass: 30-row history, prediction counts match split sizes, probabilities sum to 1, all 7 classes present.
-- **Handoff to C:** see `results/v1/member_b_handoff.md` for exactly what to consume and how.
-- **Next:** Member C runs the evaluation suite on `runs/v1-b0-baseline/predictions_{val,test}.csv` to produce `results/v1/` figures, tables and `metrics.json` for the deck.
+- **Handoff to C:** consumed — the C3/C5/C6 artifacts are now committed at `results/v1/inputs/` with full provenance.
+
+**V1 — Member C: done.** Evaluation suite built, rigorous EDA produced, V1 result package complete.
+
+- Done: `src/eval/` (metrics with both accuracy definitions, bootstrap CIs, 13 evaluation figures, rigorous 18-figure EDA, 6 tables, the consolidated data report and summary), 37 new unit tests (53 total passing), and the committed evaluation inputs so everything regenerates from a clean clone with one command.
+- **Test results (single-pass):** macro AUROC **0.9264** [0.9098, 0.9405], macro F1 **0.6213** [0.5795, 0.6590], balanced accuracy 0.7271, ECE 0.2219. All four §5.6 sanity checks pass. See `results/v1/summary.md`.
+- **Three findings:**
+  1. **§13 item 4 resolved** — the paper's per-class "accuracy" is Eq. 17's one-vs-rest form, not recall (`nv`: 0.708 vs 0.567; paper reports 0.698).
+  2. **The split is unbiased**, measured not asserted: ≤0.081 pp class drift at the lesion level, ≤0.806 pp at the image level, zero overlap, and zero pixel-confirmed duplicate leakage (a hash-only check would have falsely reported 16 leaking groups).
+  3. **The melanoma over-prediction is the specified design, not a defect** — the two §3.2.5 corrections compound multiplicatively (mel ≈36× nv's effective weight), and 291 of 452 melanoma predictions are benign nevi. Errors run in the clinically safe direction.
+- **Prep-ahead done for V4:** the Dataverse archive included `HAM10000_segmentations_lesion_tschandl.zip` — the ground-truth lesion masks §8.3 needs — now retained at `data/raw/`.
+- **Remaining for V1:** Member A assembles the deck (6–8 slides) from `results/v1/figures/` and `results/v1/eda/`, and exports the PDF backup.
 
 ---
 

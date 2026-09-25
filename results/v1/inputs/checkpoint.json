@@ -1,0 +1,8 @@
+{
+  "run_id": "v1-b0-baseline",
+  "best_epoch": 30,
+  "selection_metric": "val_macro_f1",
+  "selection_metric_value": 0.5839484357569342,
+  "config_reference": "configs\\v1-b0-baseline.yaml",
+  "best_checkpoint_sha256": "901a73a6a689cfb4617d3897152fcb33c73d40bbbf190978218fff4614f9ae0d"
+}
