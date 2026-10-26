@@ -1,0 +1,7 @@
+Metric,"Ours — V1, single pass, no preprocessing","Paper — T=50 MC Dropout, with preprocessing"
+Macro AUROC (principal),"0.9264 [0.9098, 0.9405]","0.9404 [0.9351, 0.9455]"
+Macro F1,"0.6213 [0.5795, 0.6590]","0.7308 [0.7109, 0.7497]"
+ECE (10 bins),0.2219,0.1456 (T=50) · 0.1891 (T=1)
+Brier score,0.5596,not reported numerically
+Overall accuracy (context only),0.6219,not reported
+Balanced accuracy (mean recall),0.7271,not reported

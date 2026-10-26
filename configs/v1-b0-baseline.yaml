@@ -1,0 +1,16 @@
+# v1-b0-baseline — PLAN.md §5.3, Member B task 5.
+#
+# Optimizer/LR/batch/weight-decay are PROVISIONAL (paper Table 2 was unreadable
+# in the text version — PLAN.md §14). Replace with Table 2's exact values once
+# the PDF is available; until then this is what "provisional defaults" in
+# PLAN.md §5.3.5 means concretely. See docs/deviations.md.
+run_id: v1-b0-baseline
+seed: 42
+pretrained: true
+
+optimizer: adamw
+lr: 1.0e-4
+weight_decay: 1.0e-4
+batch_size: 32
+epochs: 30
+scheduler: cosine   # CosineAnnealingLR, T_max = epochs, per paper §3.6

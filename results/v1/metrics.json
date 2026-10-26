@@ -1,0 +1,180 @@
+{
+  "run_id": "v1-b0-baseline",
+  "seed": 42,
+  "checkpoint": {
+    "run_id": "v1-b0-baseline",
+    "best_epoch": 30,
+    "selection_metric": "val_macro_f1",
+    "selection_metric_value": 0.5839484357569342,
+    "config_reference": "configs\\v1-b0-baseline.yaml",
+    "best_checkpoint_sha256": "901a73a6a689cfb4617d3897152fcb33c73d40bbbf190978218fff4614f9ae0d"
+  },
+  "test": {
+    "macro_auroc": 0.926376249192842,
+    "macro_f1": 0.6213380441343066,
+    "overall_accuracy": 0.6218771100607697,
+    "balanced_accuracy": 0.7271126179884053,
+    "n": 1481,
+    "ece_10bin_single_pass": 0.22193613256583394,
+    "brier": 0.5595677634207514,
+    "mean_confidence": 0.8428656160229574,
+    "mean_confidence_correct": 0.8929077283604777,
+    "mean_confidence_incorrect": 0.7605642134107142,
+    "bootstrap": {
+      "ci_level": 95.0,
+      "seed": 42,
+      "n_resamples_requested": 1000,
+      "n_resamples_used": 1000,
+      "n_skipped_missing_class": 0,
+      "metrics": {
+        "macro_auroc": {
+          "point": 0.926376249192842,
+          "ci_low": 0.9098337372320072,
+          "ci_high": 0.9405180276997249
+        },
+        "macro_f1": {
+          "point": 0.6213380441343066,
+          "ci_low": 0.5794641682885551,
+          "ci_high": 0.6589961348115683
+        }
+      }
+    },
+    "per_class": [
+      {
+        "label": 0,
+        "dx": "akiec",
+        "class_name": "Actinic keratosis (akiec)",
+        "malignancy": "pre-cancerous",
+        "support": 46,
+        "n_predicted": 83,
+        "accuracy_eq17": 0.9534098582039163,
+        "recall": 0.6521739130434783,
+        "specificity": 0.9630662020905923,
+        "precision": 0.3614457831325301,
+        "f1": 0.46511627906976744,
+        "auroc_ovr": 0.9493561581578549
+      },
+      {
+        "label": 1,
+        "dx": "bcc",
+        "class_name": "Basal cell carcinoma (bcc)",
+        "malignancy": "malignant",
+        "support": 71,
+        "n_predicted": 94,
+        "accuracy_eq17": 0.962862930452397,
+        "recall": 0.7746478873239436,
+        "specificity": 0.9723404255319149,
+        "precision": 0.5851063829787234,
+        "f1": 0.6666666666666666,
+        "auroc_ovr": 0.9618419738287883
+      },
+      {
+        "label": 2,
+        "dx": "bkl",
+        "class_name": "Benign keratosis (bkl)",
+        "malignancy": "benign",
+        "support": 168,
+        "n_predicted": 242,
+        "accuracy_eq17": 0.8771100607697502,
+        "recall": 0.6785714285714286,
+        "specificity": 0.9025133282559025,
+        "precision": 0.47107438016528924,
+        "f1": 0.5560975609756098,
+        "auroc_ovr": 0.8747551952997498
+      },
+      {
+        "label": 3,
+        "dx": "df",
+        "class_name": "Dermatofibroma (df)",
+        "malignancy": "benign",
+        "support": 20,
+        "n_predicted": 21,
+        "accuracy_eq17": 0.9939230249831195,
+        "recall": 0.8,
+        "specificity": 0.9965776865160849,
+        "precision": 0.7619047619047619,
+        "f1": 0.7804878048780488,
+        "auroc_ovr": 0.9624914442162902
+      },
+      {
+        "label": 4,
+        "dx": "mel",
+        "class_name": "Melanoma (mel)",
+        "malignancy": "malignant",
+        "support": 165,
+        "n_predicted": 452,
+        "accuracy_eq17": 0.7562457798784605,
+        "recall": 0.7757575757575758,
+        "specificity": 0.7537993920972644,
+        "precision": 0.2831858407079646,
+        "f1": 0.41491085899513774,
+        "auroc_ovr": 0.8333333333333333
+      },
+      {
+        "label": 5,
+        "dx": "nv",
+        "class_name": "Melanocytic nevus (nv)",
+        "malignancy": "benign",
+        "support": 992,
+        "n_predicted": 565,
+        "accuracy_eq17": 0.7076299797434166,
+        "recall": 0.5665322580645161,
+        "specificity": 0.9938650306748467,
+        "precision": 0.9946902654867257,
+        "f1": 0.7219010918432883,
+        "auroc_ovr": 0.9480712777887723
+      },
+      {
+        "label": 6,
+        "dx": "vasc",
+        "class_name": "Vascular lesion (vasc)",
+        "malignancy": "benign",
+        "support": 19,
+        "n_predicted": 24,
+        "accuracy_eq17": 0.9925725860904794,
+        "recall": 0.8421052631578947,
+        "specificity": 0.9945280437756497,
+        "precision": 0.6666666666666666,
+        "f1": 0.7441860465116279,
+        "auroc_ovr": 0.9547843617251061
+      }
+    ]
+  },
+  "validation": {
+    "macro_auroc": 0.9233127214505775,
+    "macro_f1": 0.5839484357569342,
+    "overall_accuracy": 0.6031331592689295,
+    "balanced_accuracy": 0.6880079899287856,
+    "n": 1532
+  },
+  "paper_reference": {
+    "macro_auroc": 0.9404,
+    "macro_f1": 0.7308,
+    "mel_sensitivity": 0.808,
+    "mel_specificity": 0.962,
+    "nv_accuracy_eq17": 0.698,
+    "note": "Paper values use T=50 MC Dropout with hair-removal/CLAHE preprocessing; V1 is single-pass with no preprocessing. Not directly comparable."
+  },
+  "sanity_checks": [
+    {
+      "check": "Macro AUROC well above the unmitigated baseline (0.80) and near the paper's 0.94",
+      "value": "0.9264",
+      "passed": true
+    },
+    {
+      "check": "All 7 classes predicted at least once",
+      "value": "7/7 classes, counts [83, 94, 242, 21, 452, 565, 24]",
+      "passed": true
+    },
+    {
+      "check": "Confusion matrix does not collapse into the nv column",
+      "value": "nv is 38.1% of predictions (dataset prevalence is 67%)",
+      "passed": true
+    },
+    {
+      "check": "Validation macro F1 trends upward over epochs",
+      "value": "first half mean 0.4298 -> second half mean 0.5711",
+      "passed": true
+    }
+  ]
+}
