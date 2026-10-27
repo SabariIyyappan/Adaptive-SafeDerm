@@ -1,0 +1,28 @@
+{
+  "calibration_id": "wb2-mc-v1b0-s42-temp-val",
+  "temperature": 2.0068880859164864,
+  "fitted_on": "val",
+  "applied_to": "per_pass_logits_before_softmax",
+  "aggregation": "mean of softmax(logits / T) over all 50 passes",
+  "objective": "mean negative log-likelihood on val (scipy bounded scalar search over log T)",
+  "search_bounds_T": [
+    0.05000000000000001,
+    19.999999999999996
+  ],
+  "n_passes_fit": 50,
+  "n_val_images": 1532,
+  "val_before": {
+    "nll": 1.1710627784860694,
+    "ece_10bin": 0.2255514212141984,
+    "brier": 0.5873280942592157
+  },
+  "val_after": {
+    "nll": 0.9453897328213734,
+    "ece_10bin": 0.0645137292139803,
+    "brier": 0.5055967749122808
+  },
+  "bank_run_id": "wb2-mc-v1b0-s42",
+  "checkpoint_sha256": "901a73a6a689cfb4617d3897152fcb33c73d40bbbf190978218fff4614f9ae0d",
+  "note": "Fitted for the 50-pass mean only; not claimed optimal for other T. Test data never used.",
+  "created_at": "2026-10-27T23:19:18.980478+00:00"
+}

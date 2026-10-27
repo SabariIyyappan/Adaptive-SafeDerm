@@ -11,3 +11,9 @@ PLAN.md §4.5: who ran it, where, GPU type, duration, git commit, final metrics.
 | eval of | who | inputs | seed | outputs | notes |
 |---|---|---|---|---|---|
 | `v1-b0-baseline` | Member C | `results/v1/inputs/` (committed C3/C5/C6) | 42 | `results/v1/`: 13 figures, 18 EDA figures, 6 tables, `metrics.json`, `summary.md`, `data_report.md` | `python -m src.eval.run_eval` + `python -m src.eval.eda`. Bootstrap 1000 resamples, 0 skipped. All 4 PLAN.md §5.6 sanity checks pass. Test metrics above come from this run. |
+
+## WB2 sampling runs (Member A)
+
+| run_id | who | where | device | duration | git commit | outputs | notes |
+|---|---|---|---|---|---|---|---|
+| `wb2-mc-v1b0-s42` | Member A (Soumya) | Soumya's MacBook (Apple M2) | MPS, torch 2.8.0 / torchvision 0.23.0 | val 22 s, test 18 s (2026-10-27) | `2623795` + uncommitted `src/wb2/sampling/` | `results/wb2/inputs/wb2-mc-v1b0-s42/`: val/test 50-pass MC logit banks + deterministic logits, `calibration.json` (T=2.007, val only), `timing.json`, `e0_*.json`, `fixed_budget_*.csv` | Sai's V1 `best.pt` (SHA256 `901a73a6…f9ae0d`), unchanged. Head-dropout-only MC, feature reuse (1 backbone + 50 head passes), seed 42 + shard index. E0: test det AUROC 0.9264 = V1; max abs prob gap 0.007 vs V1 due to library versions. Details: `docs/wb2_reproduction.md`. |
