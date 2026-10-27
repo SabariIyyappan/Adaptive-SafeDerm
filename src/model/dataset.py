@@ -56,7 +56,7 @@ class HAM10000Split(Dataset):
     would risk silently drifting from C1 if the two ever disagreed.
     """
 
-    def __init__(self, split_csv: Path, images_dir: Path, transform: transforms.Compose):
+    def __init__(self, split_csv: Path, images_dir: Path, transform: transforms.Compose, image_ext: str = "jpg"):
         self.frame = pd.read_csv(split_csv)
         required = {"image_id", "lesion_id", "dx", "label"}
         missing = required - set(self.frame.columns)
@@ -64,13 +64,14 @@ class HAM10000Split(Dataset):
             raise ValueError(f"{split_csv} is missing C2 columns: {missing}")
         self.images_dir = Path(images_dir)
         self.transform = transform
+        self.image_ext = image_ext.lstrip(".")
 
     def __len__(self) -> int:
         return len(self.frame)
 
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, int, str]:
         row = self.frame.iloc[idx]
-        image_path = self.images_dir / f"{row['image_id']}.jpg"
+        image_path = self.images_dir / f"{row['image_id']}.{self.image_ext}"
         image = Image.open(image_path).convert("RGB")
         tensor = self.transform(image)
         return tensor, int(row["label"]), str(row["image_id"])

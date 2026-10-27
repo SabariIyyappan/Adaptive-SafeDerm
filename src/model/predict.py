@@ -21,13 +21,13 @@ from src.model.model import NUM_CLASSES, build_model
 
 
 @torch.no_grad()
-def predict_split(checkpoint_path: Path, split_dir: Path, images_dir: Path, split: str, device: str = "cpu") -> pd.DataFrame:
+def predict_split(checkpoint_path: Path, split_dir: Path, images_dir: Path, split: str, device: str = "cpu", image_ext: str = "jpg") -> pd.DataFrame:
     ckpt = torch.load(checkpoint_path, map_location=device)
     model = build_model(pretrained=False).to(device)
     model.load_state_dict(ckpt["model_state_dict"])
     model.eval()
 
-    ds = HAM10000Split(split_dir / f"{split}.csv", images_dir, build_eval_transform())
+    ds = HAM10000Split(split_dir / f"{split}.csv", images_dir, build_eval_transform(), image_ext=image_ext)
     loader = DataLoader(ds, batch_size=64, shuffle=False)
 
     image_ids: list[str] = []
@@ -60,9 +60,10 @@ def main() -> None:
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
+    parser.add_argument("--image-ext", default="jpg", help="Image file extension under --images-dir (e.g. 'png' for V2's preprocessed cache).")
     args = parser.parse_args()
 
-    out = predict_split(args.checkpoint, args.split_dir, args.images_dir, args.split, device=args.device)
+    out = predict_split(args.checkpoint, args.split_dir, args.images_dir, args.split, device=args.device, image_ext=args.image_ext)
     out["run_id"] = args.run_id
     args.out.parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(args.out, index=False)

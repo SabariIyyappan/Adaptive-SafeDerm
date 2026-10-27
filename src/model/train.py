@@ -103,22 +103,33 @@ def train(
     set_seed(config["seed"])
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    train_ds = HAM10000Split(split_dir / "train.csv", images_dir, build_train_transform())
-    val_ds = HAM10000Split(split_dir / "val.csv", images_dir, build_eval_transform())
+    image_ext = config.get("image_ext", "jpg")
+    train_ds = HAM10000Split(split_dir / "train.csv", images_dir, build_train_transform(), image_ext=image_ext)
+    val_ds = HAM10000Split(split_dir / "val.csv", images_dir, build_eval_transform(), image_ext=image_ext)
 
     train_labels = train_ds.labels.tolist()
-    sampler = build_weighted_sampler(train_labels, NUM_CLASSES)
-    class_weights = class_weights_for_loss(train_labels, NUM_CLASSES).to(device)
+    use_sampler = config.get("use_sampler", True)
+    use_class_weights = config.get("use_class_weights", True)
 
-    train_loader = DataLoader(
-        train_ds, batch_size=config["batch_size"], sampler=sampler, num_workers=num_workers
-    )
+    if use_sampler:
+        sampler = build_weighted_sampler(train_labels, NUM_CLASSES)
+        train_loader = DataLoader(
+            train_ds, batch_size=config["batch_size"], sampler=sampler, num_workers=num_workers
+        )
+    else:
+        train_loader = DataLoader(
+            train_ds, batch_size=config["batch_size"], shuffle=True, num_workers=num_workers
+        )
     val_loader = DataLoader(
         val_ds, batch_size=config["batch_size"], shuffle=False, num_workers=num_workers
     )
 
     model = build_model(pretrained=config.get("pretrained", True)).to(device)
-    criterion = nn.CrossEntropyLoss(weight=class_weights)
+    if use_class_weights:
+        class_weights = class_weights_for_loss(train_labels, NUM_CLASSES).to(device)
+        criterion = nn.CrossEntropyLoss(weight=class_weights)
+    else:
+        criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=config["lr"], weight_decay=config["weight_decay"]
     )
