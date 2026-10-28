@@ -89,3 +89,139 @@ Preprocessing (JPEG decode + transform, CPU) adds a p50 of 4.8 ms per image. Bat
 - Savings from stopping MC early are savings in **head** passes. The backbone runs once whether T is 10 or 50: going from T=50 to T=10 saves about 6.5 ms per image (17.7 → 11.2 ms), while feature reuse itself is roughly a 23× speedup over the naive path.
 - The temperature is fitted for the 50-pass mean and is not claimed to be optimal for T=10, T=20 or the deterministic logits. It is never fitted on test.
 - Library versions shift probabilities slightly compared with V1's committed predictions (see E0 above). The device does not.
+
+
+## C. Controller, comparators and analysis (Member C, `src/wb2/controller/`, `src/wb2/analysis/`)
+
+The bank format in section A was agreed with Member A on 2026-10-27. `src/wb2/controller/bank.py` validates every bank on load and refuses to continue on any of:
+- a shape other than N × 50 × 7;
+- IDs or labels that don't match `data/splits/{split}.csv`;
+- duplicate IDs;
+- a class order other than C1's;
+- a `PARTIAL` run without explicit pilot opt-in, or any `FAILED` run.
+
+Rows with non-finite values are counted and reported. Both delivered banks pass, with 0 non-finite rows.
+
+### Controller design (Workbook Chapter 7)
+
+**Inputs at inference time:** the ordered per-pass logits of one image and the frozen temperature τ_T. Policies never receive `y_true`; labels are joined only afterwards, for evaluation. A unit test shuffles the labels and checks that every decision stays identical.
+
+**Statistics at checkpoint k ∈ {5, 10, …, 50}** (`features.py`), computed from passes 0..k−1 only. A unit test checks that changing later passes never changes earlier statistics.
+- p̄_k: mean of softmax(logits/τ_T) over the first k passes.
+- pred_k = argmax p̄_k. `tie` = the top two probabilities are equal.
+- H_k: entropy of p̄_k ÷ ln 7, so it lies in 0..1. Expected entropy and mutual information are also recorded.
+- s_k = p̄_mel + p̄_bcc, the suspicious score. akiec is reported separately as an attention score; it is **not** in the suspicious group.
+- Changes since the previous checkpoint:
+  - class flip;
+  - ΔH = |H_k − H_{k−5}|;
+  - Δp = ‖p̄_k − p̄_{k−5}‖∞;
+  - change in mean per-class variance.
+
+  At k = 5 there is no previous checkpoint, so nothing is "stable" there and the minimum is 10 passes.
+
+**Model-risk tier.** This is a model risk/attention tier, not a pathology severity. The first matching rule wins:
+
+| Tier | Rule |
+|---|---|
+| critical | (benign-class prediction **and** s ≥ τ_s), the false-reassurance case, **or** (mel/bcc prediction **and** (unstable or H ≥ h_hi)) |
+| high | mel/bcc prediction, **or** H ≥ h_hi |
+| medium | H ≥ h_lo, **or** \|s − τ_s\| < m |
+| low | otherwise |
+
+"Unstable" means the class flipped, the top two are tied, or ΔH ≥ δ_H.
+
+**Stop and review** (`policies.RiskAware`):
+1. Draw passes 5 at a time, up to 50.
+2. Stop as **TRUSTED RESULT** at the first checkpoint where every condition holds:
+   - k ≥ 10 (k ≥ 20 for the high tier);
+   - no class flip and no tie;
+   - ΔH < δ_H;
+   - H < h_hi;
+   - |s − τ_s| ≥ m;
+   - the tier is not critical.
+3. If 50 passes are reached without stopping, the result is **NEEDS REVIEW**. The reasons list each failed check (`UNSTABLE_CLASS`, `UNSTABLE_UNCERTAINTY`, `HIGH_ENTROPY`, `SUSPICIOUS_MARGIN`, `CRITICAL_TIER`) plus `BUDGET_EXHAUSTED`.
+4. A non-finite logit gives NEEDS REVIEW `NONFINITE` at once.
+5. `explanation_check = NOT_RUN` on every decision. The occlusion / Grad-CAM++ verifier is planned V4 work and is never claimed.
+6. A separate `clinical_attention` flag marks every mel or bcc prediction.
+   - A stable, confident suspicious prediction may be TRUSTED by the computational checks, but it always carries this flag and is never presented as benign or safe.
+   - This is a declared design choice. If every suspicious prediction went to review instead, V1's suspicious predictions alone would be about 37% of test images, and no review budget could be met.
+
+**Comparators**, all replayed on the same ordered draws:
+- deterministic T=1 (the det logits);
+- fixed T = 10 / 20 / 50, where T=10 and T=20 are prefixes of the T=50 bank;
+- fixed T=50 + entropy referral (refer H ≥ θ, with θ set on val to the review budget);
+- **variance-only adaptive**: stop at the first k ≥ 10 where Δp < ε_p and Δ(mean variance) < ε_var, cap 50, plus an entropy-referral gate tuned the same way. This comparator is MC-CP-*inspired*: it has no conformal step and is not an MC-CP reproduction.
+
+### Validation-only tuning protocol
+
+Declared before tuning: the review budget is R = 0.20 and the macro-F1 tolerance is 0.01.
+- **Risk-aware controller:** minimize mean passes on val, subject to all three of:
+  - review rate ≤ R;
+  - accepted-melanoma misses ÷ all melanoma ≤ that of fixed T=50 + referral at the same R;
+  - macro F1 ≥ T=50 macro F1 − 0.01.
+
+  Ties go to fewer melanoma misses, then the lower review rate.
+- **Variance comparator:** minimize mean passes subject to the macro-F1 constraint; its referral threshold refers the top R by final entropy.
+
+**Primary vs secondary analysis**, declared before any test replay:
+- **Primary:** calibrated, using Member A's val-fitted T = 2.007 (`calibration.json`), applied to per-pass logits before softmax.
+- **Secondary:** uncalibrated.
+
+Each has its own config, tuned on val only and locked: `configs/wb2_controller.yaml` and `configs/wb2_controller_uncalibrated.yaml`.
+
+**Tuning history (full disclosure).**
+- Grid v1 had 457 settings. Its val optimum hit the grid edges: h_hi = 0.7, h_lo = 0.15, δ_H = 0.05, ε_p = 0.05.
+- The ranges were widened **once**, on val, before any test replay, to grid v2 (2,306 settings, defined in `tune.py`). The configs were then frozen.
+- Grid v2 still selects edge values for h_hi (0.9 calibrated, 0.8 uncalibrated) and h_lo (0.05). These were left as they are rather than searched further.
+  - **h_lo has no effect on decisions:** the medium tier follows the same stopping rule as low, so h_lo only changes the tier label, and the tie goes to the first grid value.
+  - **A high h_hi means the entropy cap rarely binds:** stopping is driven by class/uncertainty stability and the suspicious-score margin.
+- Every evaluated setting is saved in `results/wb2/{calibrated,uncalibrated}/tables/tuning_grid_val.csv`.
+
+Safeguards in the tools:
+- `tune.py` refuses non-val banks.
+- `run_wb2.py` refuses to run when:
+  - the config is unlocked;
+  - the calibration doesn't match the one used for tuning;
+  - the val and test banks come from different checkpoints;
+  - a synthetic bank would be written into `results/wb2/`.
+
+### Commands (from the repo root)
+
+```bash
+python -m unittest discover -s tests -t .
+D=results/wb2/inputs/wb2-mc-v1b0-s42
+# 1. tune on val only (writes the locked configs)
+python -m src.wb2.controller.tune --bank-dir $D --temperature-json $D/calibration.json \
+    --out configs/wb2_controller.yaml --grid-out results/wb2/calibrated/tables/tuning_grid_val.csv
+python -m src.wb2.controller.tune --bank-dir $D \
+    --out configs/wb2_controller_uncalibrated.yaml --grid-out results/wb2/uncalibrated/tables/tuning_grid_val.csv
+# 2. replay + evaluate (val, then test once)
+for s in val test; do
+  python -m src.wb2.analysis.run_wb2 --bank-dir $D --split $s --config configs/wb2_controller.yaml \
+      --temperature-json $D/calibration.json --out-dir results/wb2/calibrated --status MEASURED
+  python -m src.wb2.analysis.run_wb2 --bank-dir $D --split $s --config configs/wb2_controller_uncalibrated.yaml \
+      --out-dir results/wb2/uncalibrated --status MEASURED
+done
+```
+
+(Re-running `tune` on an existing config requires `--overwrite`. Use it only if that config has not been used on test.)
+
+Each `results/wb2/{calibrated,uncalibrated}/` directory contains:
+- `decisions/decisions_{split}.csv.gz`: WB2-O1, one row per image × method;
+- `tables/`, holding:
+  - the policy comparison and fixed-budget tables;
+  - stop-pass and tier distributions;
+  - the paired lesion-grouped bootstrap (1,000 resamples, seed 42, resampling whole lesions);
+  - the melanoma audit and confident errors;
+  - the coverage–risk curve;
+- `figures/controller_*`;
+- `manifest_{split}.json`;
+- `report_{split}.md`.
+
+The lesion bootstrap is a different estimator from V1's image-level bootstrap and is labeled separately.
+
+### Interpretation limits
+
+- Pass savings from replaying saved logits are **algorithmic**, counted in stochastic *head* draws. With feature reuse the backbone runs once per image regardless of T. Per section A, going from T=50 to T=10 saves about 6.5 ms per image on Member A's M2. Any wall-clock claim must use those measured timings, not the pass counts.
+- The temperature is fitted for the 50-pass mean only. The adaptive policies apply the same T at every checkpoint, so it is not claimed optimal for shorter prefixes.
+- TRUSTED RESULT means the model's computational checks passed. It never means clinically safe or benign.

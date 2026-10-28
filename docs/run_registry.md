@@ -17,3 +17,10 @@ PLAN.md §4.5: who ran it, where, GPU type, duration, git commit, final metrics.
 | run_id | who | where | device | duration | git commit | outputs | notes |
 |---|---|---|---|---|---|---|---|
 | `wb2-mc-v1b0-s42` | Member A (Soumya) | Soumya's MacBook (Apple M2) | MPS, torch 2.8.0 / torchvision 0.23.0 | val 22 s, test 18 s (2026-10-27) | `2623795` + uncommitted `src/wb2/sampling/` | `results/wb2/inputs/wb2-mc-v1b0-s42/`: val/test 50-pass MC logit banks + deterministic logits, `calibration.json` (T=2.007, val only), `timing.json`, `e0_*.json`, `fixed_budget_*.csv` | Sai's V1 `best.pt` (SHA256 `901a73a6…f9ae0d`), unchanged. Head-dropout-only MC, feature reuse (1 backbone + 50 head passes), seed 42 + shard index. E0: test det AUROC 0.9264 = V1; max abs prob gap 0.007 vs V1 due to library versions. Details: `docs/wb2_reproduction.md`. |
+
+## WB2 controller runs (Member C)
+
+| run_id | who | where | inputs | seed | outputs | notes |
+|---|---|---|---|---|---|---|
+| `wb2_{val,test}_wb2-mc-v1b0-s42-temp-val` (primary, calibrated) | Member C (Sabari) | Sabari's Windows laptop, CPU only (numpy replay; no GPU needed) | `results/wb2/inputs/wb2-mc-v1b0-s42/` (Member A banks + `calibration.json`, T=2.007) | 42 (bootstrap) | `configs/wb2_controller.yaml` (val-tuned, locked), `results/wb2/calibrated/` | 2026-10-27. Val tuning (grid v2, 2,306 settings) then one test replay. Test: risk-aware 18.3 mean head passes, 11.3% review, mel missed & accepted 22/165 vs 30/165 for T=50+referral at matched coverage (Δ −4.9 pp, lesion CI [−10.7, −0.6]). See `results/wb2/summary.md`. |
+| `wb2_{val,test}_uncalibrated` (secondary) | Member C (Sabari) | same | same banks, no temperature | 42 | `configs/wb2_controller_uncalibrated.yaml`, `results/wb2/uncalibrated/` | Same protocol. Test: 22/165 vs 33/165 at matched coverage (Δ −6.7 pp [−12.6, −2.0]). |

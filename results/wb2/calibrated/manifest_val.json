@@ -1,0 +1,94 @@
+{
+  "run_id": "wb2_val_wb2-mc-v1b0-s42-temp-val",
+  "status": "MEASURED",
+  "split": "val",
+  "n_images": 1532,
+  "class_counts": {
+    "akiec": 51,
+    "bcc": 77,
+    "bkl": 157,
+    "df": 19,
+    "mel": 170,
+    "nv": 1034,
+    "vasc": 24
+  },
+  "bank_dir": "results\\wb2\\inputs\\wb2-mc-v1b0-s42",
+  "bank_files_sha256": {
+    "val_mc_logits.npz": "e2be7e07a27006004ac3108f5fafbaf38a88bb1f540bdde71561bf023b650999",
+    "val_det_logits.npz": "8aff273d893b2986d3c8ac5361ecf70d80d357667246f2fe404bc9a9eec3f4d2",
+    "val_ids.csv": "4b6bbee0a7ef71385339333f3871b4c0a14b733001620140e347f8c918c3c8db",
+    "val_manifest.json": "9e59739de1e68802218e1c2c56b11b993cf3c424bc81a22e9bc0620731da7567"
+  },
+  "bank_manifest": {
+    "run_id": "wb2-mc-v1b0-s42",
+    "split": "val",
+    "status": "COMPLETE",
+    "error": null,
+    "synthetic": false,
+    "pilot_subset": false,
+    "n_images": 1532,
+    "n_images_expected": 1532,
+    "n_passes": 50,
+    "class_order": [
+      "akiec",
+      "bcc",
+      "bkl",
+      "df",
+      "mel",
+      "nv",
+      "vasc"
+    ],
+    "logit_kind": "raw logits (pre-softmax), uncalibrated",
+    "checkpoint_sha256": "901a73a6a689cfb4617d3897152fcb33c73d40bbbf190978218fff4614f9ae0d",
+    "checkpoint_epoch": 30,
+    "seed": 42,
+    "seed_policy": "torch.manual_seed(seed + shard_index) at the start of each shard",
+    "shard_size": 256,
+    "batch_size": 64,
+    "transform": "src.model.dataset.build_eval_transform: Resize((224,224)) -> ToTensor -> Normalize(ImageNet mean/std); raw HAM10000 JPEGs, no hair removal / CLAHE (V1 path)",
+    "split_csv": "data/splits/val.csv",
+    "split_csv_sha256": "0b542fc2fed2122326b3c311796278e103de9fbcbd9a4668d8d50e367e87136b",
+    "stochastic_modules": [
+      "classifier.2"
+    ],
+    "feature_reuse": true,
+    "backbone_passes_per_image": 1,
+    "head_passes_per_image": 50,
+    "deterministic_logits": "separate file; model.eval() only, dropout off",
+    "device": "mps",
+    "hardware": "Apple MPS; macOS-15.5-arm64-arm-64bit; arm",
+    "torch_version": "2.8.0",
+    "torchvision_version": "0.23.0",
+    "numpy_version": "2.0.2",
+    "python_version": "3.9.6",
+    "git_commit": "26237953178286d86863d02ae29d2b7be9a1d7ca+dirty",
+    "started_at": "2026-10-27T23:18:30.544162+00:00",
+    "finished_at": "2026-10-27T23:18:52.158246+00:00"
+  },
+  "nonfinite_rows": 0,
+  "config": "configs\\wb2_controller.yaml",
+  "config_tuned_at": "2026-10-28T06:01:05+00:00",
+  "calibration_id": "wb2-mc-v1b0-s42-temp-val",
+  "temperature": 2.0068880859164864,
+  "bootstrap": {
+    "n_resamples": 1000,
+    "seed": 42,
+    "unit": "lesion_id"
+  },
+  "git": {
+    "commit": "a5afca0aa359953687fa1254bc340db919c8c550",
+    "branch": "wb2-sabari-controller",
+    "dirty": true
+  },
+  "environment": {
+    "python": "3.11.6",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+    "numpy": "2.3.4",
+    "pandas": "2.2.3",
+    "scikit_learn": "1.7.1",
+    "matplotlib": "3.11.1"
+  },
+  "started_at": "2026-10-28T06:01:56+00:00",
+  "finished_at": "2026-10-28T06:03:50+00:00"
+}
