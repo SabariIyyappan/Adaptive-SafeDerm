@@ -41,17 +41,26 @@ def load_config(path: Path) -> dict:
         return yaml.safe_load(f)
 
 
-def run_epoch_train(model, loader, optimizer, criterion, device) -> float:
+def run_epoch_train(model, loader, optimizer, criterion, device, scaler=None) -> float:
+    """One training epoch. `scaler` (a torch.amp.GradScaler) turns on mixed
+    precision — used only for V5's larger backbones on a 6 GB GPU.
+    """
     model.train()
     total_loss = 0.0
     n = 0
     for images, labels, _image_ids in loader:
         images, labels = images.to(device), labels.to(device)
         optimizer.zero_grad()
-        logits = model(images)
-        loss = criterion(logits, labels)
-        loss.backward()
-        optimizer.step()
+        with torch.autocast(device_type=torch.device(device).type, enabled=scaler is not None):
+            logits = model(images)
+            loss = criterion(logits.float(), labels)
+        if scaler is not None:
+            scaler.scale(loss).backward()
+            scaler.step(optimizer)
+            scaler.update()
+        else:
+            loss.backward()
+            optimizer.step()
         total_loss += loss.item() * images.size(0)
         n += images.size(0)
     return total_loss / n
@@ -111,20 +120,17 @@ def train(
     use_sampler = config.get("use_sampler", True)
     use_class_weights = config.get("use_class_weights", True)
 
+    loader_kwargs = {"num_workers": num_workers, "persistent_workers": num_workers > 0}
     if use_sampler:
         sampler = build_weighted_sampler(train_labels, NUM_CLASSES)
-        train_loader = DataLoader(
-            train_ds, batch_size=config["batch_size"], sampler=sampler, num_workers=num_workers
-        )
+        train_loader = DataLoader(train_ds, batch_size=config["batch_size"], sampler=sampler, **loader_kwargs)
     else:
-        train_loader = DataLoader(
-            train_ds, batch_size=config["batch_size"], shuffle=True, num_workers=num_workers
-        )
-    val_loader = DataLoader(
-        val_ds, batch_size=config["batch_size"], shuffle=False, num_workers=num_workers
-    )
+        train_loader = DataLoader(train_ds, batch_size=config["batch_size"], shuffle=True, **loader_kwargs)
+    val_loader = DataLoader(val_ds, batch_size=config["batch_size"], shuffle=False, **loader_kwargs)
 
-    model = build_model(pretrained=config.get("pretrained", True)).to(device)
+    arch = config.get("arch", "efficientnet_b0")
+    model = build_model(pretrained=config.get("pretrained", True), arch=arch).to(device)
+    scaler = torch.amp.GradScaler() if config.get("amp", False) else None
     if use_class_weights:
         class_weights = class_weights_for_loss(train_labels, NUM_CLASSES).to(device)
         criterion = nn.CrossEntropyLoss(weight=class_weights)
@@ -140,7 +146,7 @@ def train(
     best_epoch = -1
 
     for epoch in range(1, config["epochs"] + 1):
-        train_loss = run_epoch_train(model, train_loader, optimizer, criterion, device)
+        train_loss = run_epoch_train(model, train_loader, optimizer, criterion, device, scaler=scaler)
         val_loss, val_macro_f1, val_macro_auroc = run_epoch_eval(model, val_loader, criterion, device)
         lr = optimizer.param_groups[0]["lr"]
         scheduler.step()

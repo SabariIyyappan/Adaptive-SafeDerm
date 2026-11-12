@@ -1,0 +1,9 @@
+| Class                      | Category      |   Support |   Predicted |   Accuracy (Eq. 17) |   Recall / sensitivity |   Specificity |   Precision |    F1 |   AUROC (ovr) | Paper (quoted in text)   |
+|:---------------------------|:--------------|----------:|------------:|--------------------:|-----------------------:|--------------:|------------:|------:|--------------:|:-------------------------|
+| Actinic keratosis (akiec)  | pre-cancerous |        46 |          69 |               0.967 |                  0.717 |         0.975 |       0.478 | 0.574 |         0.912 | —                        |
+| Basal cell carcinoma (bcc) | malignant     |        71 |          92 |               0.968 |                  0.817 |         0.976 |       0.63  | 0.712 |         0.971 | —                        |
+| Benign keratosis (bkl)     | benign        |       168 |         240 |               0.873 |                  0.655 |         0.901 |       0.458 | 0.539 |         0.884 | —                        |
+| Dermatofibroma (df)        | benign        |        20 |          26 |               0.991 |                  0.8   |         0.993 |       0.615 | 0.696 |         0.965 | —                        |
+| Melanoma (mel)             | malignant     |       165 |         463 |               0.727 |                  0.679 |         0.733 |       0.242 | 0.357 |         0.796 | sens 0.808 / spec 0.962  |
+| Melanocytic nevus (nv)     | benign        |       992 |         572 |               0.704 |                  0.568 |         0.982 |       0.984 | 0.72  |         0.94  | accuracy 0.698 (Eq. 17)  |
+| Vascular lesion (vasc)     | benign        |        19 |          19 |               0.993 |                  0.737 |         0.997 |       0.737 | 0.737 |         0.986 | —                        |

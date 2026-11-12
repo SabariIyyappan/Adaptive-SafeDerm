@@ -1,0 +1,8 @@
+{
+  "run_id": "v2-abl-nopretrain",
+  "best_epoch": 28,
+  "selection_metric": "val_macro_f1",
+  "selection_metric_value": 0.3403819586342461,
+  "config_reference": "configs\\v2-abl-nopretrain.yaml",
+  "best_checkpoint_sha256": "1b8728e2e0fd07c8679b5649e4c7db6daa7dd9a6dbb5afbdcffd80d73035c11c"
+}

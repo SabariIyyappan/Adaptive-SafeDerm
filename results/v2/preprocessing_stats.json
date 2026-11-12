@@ -1,0 +1,15 @@
+{
+  "n_images": 10015,
+  "n_ok": 10015,
+  "hair_fraction_mean": 0.12461519905327191,
+  "hair_fraction_median": 0.0969851851851851,
+  "hair_fraction_p95": 0.314662222222222,
+  "processing_time_s_mean": 0.12718618331522724,
+  "processing_time_s_total_cpu": 1273.7696259020008,
+  "cache_sizes_sampled": [
+    [
+      224,
+      224
+    ]
+  ]
+}

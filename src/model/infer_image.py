@@ -18,7 +18,7 @@ from PIL import Image
 
 from src.data.labels import EXPECTED_HAM10000_LABEL_MAP
 from src.model.dataset import build_eval_transform
-from src.model.model import build_model
+from src.model.model import arch_of, build_model
 
 # int label -> class name, inverse of EXPECTED_HAM10000_LABEL_MAP
 IDX_TO_CLASS = {idx: name for name, idx in EXPECTED_HAM10000_LABEL_MAP.items()}
@@ -36,8 +36,8 @@ CLASS_DESCRIPTIONS = {
 
 @torch.no_grad()
 def predict_image(image_path: Path, checkpoint_path: Path, device: str = "cpu") -> dict[str, float]:
-    ckpt = torch.load(checkpoint_path, map_location=device)
-    model = build_model(pretrained=False).to(device)
+    ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
+    model = build_model(pretrained=False, arch=arch_of(ckpt)).to(device)
     model.load_state_dict(ckpt["model_state_dict"])
     model.eval()
 

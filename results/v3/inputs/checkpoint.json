@@ -1,0 +1,8 @@
+{
+  "run_id": "v2-main-b0",
+  "best_epoch": 28,
+  "selection_metric": "val_macro_f1",
+  "selection_metric_value": 0.5502356523957195,
+  "config_reference": "configs\\v2-main-b0.yaml",
+  "best_checkpoint_sha256": "c07d12fa83f07edc1376a3810937911b20cd6d3ee99c6b1f93c6f79ee28f6a7d"
+}

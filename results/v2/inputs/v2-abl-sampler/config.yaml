@@ -1,0 +1,21 @@
+# v2-abl-sampler — ablation (ii): sampler only (unweighted CE)
+#
+# Paper-faithful recipe on the C9 hair-removed + CLAHE cache (data/cache_prep224,
+# PNG). Hyperparameters are the same PROVISIONAL Table 2 values as V1 (the
+# paper's Table 2 is still unreadable — docs/deviations.md D-V2-1). Every V2
+# run is identical except the factor(s) toggled below.
+run_id: v2-abl-sampler
+seed: 42
+arch: efficientnet_b0
+pretrained: true
+image_ext: png
+
+use_sampler: true        # WeightedRandomSampler, w_i = 1/n_c (paper §3.2.5a)
+use_class_weights: false  # class-weighted CE, Eq. 2 (paper §3.2.5b)
+
+optimizer: adamw
+lr: 1.0e-4
+weight_decay: 1.0e-4
+batch_size: 32
+epochs: 30
+scheduler: cosine   # CosineAnnealingLR, T_max = epochs, per paper §3.6

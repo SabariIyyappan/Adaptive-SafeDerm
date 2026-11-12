@@ -17,13 +17,13 @@ import torch
 from torch.utils.data import DataLoader
 
 from src.model.dataset import HAM10000Split, build_eval_transform
-from src.model.model import NUM_CLASSES, build_model
+from src.model.model import NUM_CLASSES, arch_of, build_model
 
 
 @torch.no_grad()
 def predict_split(checkpoint_path: Path, split_dir: Path, images_dir: Path, split: str, device: str = "cpu", image_ext: str = "jpg") -> pd.DataFrame:
-    ckpt = torch.load(checkpoint_path, map_location=device)
-    model = build_model(pretrained=False).to(device)
+    ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
+    model = build_model(pretrained=False, arch=arch_of(ckpt)).to(device)
     model.load_state_dict(ckpt["model_state_dict"])
     model.eval()
 

@@ -120,3 +120,52 @@ same dataset, so Member C's EDA statistics describe the images Member B actually
 **One gotcha:** the Dataverse archive stores metadata as `HAM10000_metadata` with no extension, and
 nests the images in two inner zips. `acquire.py` handles the merge, but the metadata file must be
 copied to `HAM10000_metadata.csv` for the downstream tools.
+
+---
+
+### V2 — D-V2-1: Table 2 hyperparameters still provisional
+**Section:** §3.6, Table 2 / PLAN.md §6.3 Member B item 1
+**What:** The paper PDF's tables were still not accessible (the publisher site returns HTTP 403 to automated fetches), so the exact Table 2 values could not be read.
+**What we did:** Kept the V1 provisional values for every V2-V5 run (AdamW, LR 1e-4, weight decay 1e-4, batch 32, cosine `T_max=30`, 30 epochs, seed 42), as PLAN.md §6.3 allows.
+**Why:** Changing hyperparameters without the source values would be a guess; keeping them fixed makes V1 -> V2 a clean preprocessing-only comparison.
+
+### V2 — D-V2-2: Preprocessing implementation details the paper leaves open
+**Section:** §3.2.1
+**What:** The paper names the operations but not every library detail.
+**What we did:** `src/data/preprocess.py` — OpenCV `MORPH_ELLIPSE` 17x17 as the "disk" element, `MORPH_BLACKHAT` on grayscale, `THRESH_BINARY` at 10, `INPAINT_TELEA` radius 3, then RGB->LAB, `createCLAHE(2.0, (8,8))` applied to **each** of L, a, b (paper wording), LAB->RGB, bilinear resize to 224x224, lossless PNG. Applied to train, val and test identically, on the full-resolution image before resizing.
+**Observed:** At threshold 10 the mask covers a median 9.7% of pixels (95th percentile 31%) — it marks fine dark skin texture and lesion-border structure as well as hairs, and the inpainting smooths those too (`results/v2/figures/preprocessing_before_after.png`). Faithful to the stated parameters; reported, not tuned.
+
+### V2 — D-V2-3: Data loading single-process on Windows
+**What:** Multi-worker `DataLoader`s crashed on Windows ("worker exited unexpectedly") after the first epoch.
+**What we did:** All V2/V5 runs use `--num-workers 0`. The 224x224 PNG cache makes this cheap; it doesn't affect results (same sampler/augmentation RNG stream for a given seed).
+
+### V2 — D-V2-4: Ablation (v) "no ImageNet pretraining" included
+**What:** It's unclear whether paper Table 8 contains a no-pretraining row (the text credits pretraining with +6-8% AUROC).
+**What we did:** Ran it as `v2-abl-nopretrain` (random init, both corrections) and report it as a fifth row.
+
+### V3 — D-V3-1: "T=1" is the deterministic dropout-off pass
+**Section:** §4.2 / PLAN.md §13 item 8
+**What we did:** ECE "T=1" uses one deterministic pass with dropout off. The MC budget sweep table also reports the mean of the first T stochastic passes for T = 1, 5, 10, 20, 30, 50 from the same 50-pass bank.
+
+### V3 — D-V3-2: Head-only MC sampling over cached features
+**Section:** §3.4.2 / PLAN.md §7.3 item 4
+**What we did:** Only the head `Dropout(0.3)` is stochastic, so pooled backbone features are computed once and the head sampled 50 times. Verified on 32 real images against full-network passes under the same seed (max |diff| recorded in `results/v3/inputs/mc_report.json`). EfficientNet-B0's 16 StochasticDepth blocks and all BatchNorm stay in eval mode.
+
+### V3 — D-V3-3: Supplementary validation-tau referral
+**Section:** §3.4.4 / PLAN.md §13 item 5
+**What:** The paper sets tau from the test-set entropy distribution. Table 6 replicates that exactly; Table 6b additionally reports tau from the validation entropy distribution, which uses no test information. Reported side by side; the paper-faithful Table 6 is the headline.
+
+### V4 — D-V4-1: Mask source and alignment
+**Section:** §3.5 / PLAN.md §8.3
+**What we did:** Masks from the HAM10000 Harvard Dataverse file `HAM10000_segmentations_lesion_tschandl.zip` (file id 3838943). Coverage is 10,015/10,015 images (1,481/1,481 test). Each mask is resized to 224x224 with nearest-neighbour (same plain resize as the images) and binarized.
+
+### V4 — D-V4-2: Grad-CAM target class and referral rate
+**Section:** §3.5, Table 10 / PLAN.md §13 item 9, §7.3 C item 5
+**What we did:** Target class = predicted class. Accepted vs referred split at r = 30% (Table 10's r is unreadable in our copy); IoU at every r is also reported.
+
+### V5 — D-V5-1: MobileNetV3 variant
+**What we did:** MobileNetV3-**Large** (Table 7's variant unreadable). Its torchvision classifier is replaced wholesale by the shared 960->256->Dropout(0.3)->7 head.
+
+### V5 — D-V5-2: Mixed precision for ResNet-50 and DenseNet-121
+**Section:** PLAN.md §9.3 ("If a member has less than 12 GB VRAM: use mixed precision...")
+**What we did:** The only available GPU is a 6 GB RTX 3060 Laptop, so `v5-resnet50` and `v5-densenet121` train with `torch.autocast` + `GradScaler` (`amp: true`) at the unchanged batch size 32. EfficientNet-B0 and MobileNetV3 runs are fp32.

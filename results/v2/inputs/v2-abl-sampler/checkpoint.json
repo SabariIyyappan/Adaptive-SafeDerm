@@ -1,0 +1,8 @@
+{
+  "run_id": "v2-abl-sampler",
+  "best_epoch": 11,
+  "selection_metric": "val_macro_f1",
+  "selection_metric_value": 0.6400097507207703,
+  "config_reference": "configs\\v2-abl-sampler.yaml",
+  "best_checkpoint_sha256": "495201be3035eb7b2f44e2d968807ba81a13f7b7aa9bc439d7e98ea48b0b3f49"
+}

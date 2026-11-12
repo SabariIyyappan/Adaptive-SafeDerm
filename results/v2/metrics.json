@@ -1,0 +1,385 @@
+{
+  "main": {
+    "run_id": "v2-main-b0",
+    "checkpoint": {
+      "run_id": "v2-main-b0",
+      "best_epoch": 28,
+      "selection_metric": "val_macro_f1",
+      "selection_metric_value": 0.5502356523957195,
+      "config_reference": "configs\\v2-main-b0.yaml",
+      "best_checkpoint_sha256": "c07d12fa83f07edc1376a3810937911b20cd6d3ee99c6b1f93c6f79ee28f6a7d"
+    },
+    "macro_auroc": 0.9214198753279624,
+    "macro_auroc_ci": [
+      0.9077193854442903,
+      0.933952703593693
+    ],
+    "macro_f1": 0.6185209839242877,
+    "macro_f1_ci": [
+      0.5754122437733608,
+      0.6572850406157773
+    ],
+    "balanced_accuracy": 0.7100298278799798,
+    "overall_accuracy": 0.6103983794733289,
+    "ece_10bin": 0.22540073608372724,
+    "brier": 0.5594854759294461,
+    "mel_sensitivity": 0.6787878787878788,
+    "mel_specificity": 0.7332826747720365,
+    "df_sensitivity": 0.8,
+    "nv_accuracy_eq17": 0.7029034436191762,
+    "nv_recall": 0.5655241935483871,
+    "n": 1481,
+    "bootstrap": {
+      "ci_level": 95.0,
+      "seed": 42,
+      "n_resamples_requested": 1000,
+      "n_resamples_used": 1000,
+      "n_skipped_missing_class": 0,
+      "metrics": {
+        "macro_auroc": {
+          "point": 0.9214198753279624,
+          "ci_low": 0.9077193854442903,
+          "ci_high": 0.933952703593693
+        },
+        "macro_f1": {
+          "point": 0.6185209839242877,
+          "ci_low": 0.5754122437733608,
+          "ci_high": 0.6572850406157773
+        }
+      }
+    },
+    "per_class": [
+      {
+        "label": 0,
+        "dx": "akiec",
+        "class_name": "Actinic keratosis (akiec)",
+        "malignancy": "pre-cancerous",
+        "support": 46,
+        "n_predicted": 69,
+        "accuracy_eq17": 0.9669142471303174,
+        "recall": 0.717391304347826,
+        "specificity": 0.9749128919860627,
+        "precision": 0.4782608695652174,
+        "f1": 0.5739130434782609,
+        "auroc_ovr": 0.9132252688986517
+      },
+      {
+        "label": 1,
+        "dx": "bcc",
+        "class_name": "Basal cell carcinoma (bcc)",
+        "malignancy": "malignant",
+        "support": 71,
+        "n_predicted": 92,
+        "accuracy_eq17": 0.9682646860229575,
+        "recall": 0.8169014084507042,
+        "specificity": 0.975886524822695,
+        "precision": 0.6304347826086957,
+        "f1": 0.7116564417177914,
+        "auroc_ovr": 0.9707222055738687
+      },
+      {
+        "label": 2,
+        "dx": "bkl",
+        "class_name": "Benign keratosis (bkl)",
+        "malignancy": "benign",
+        "support": 168,
+        "n_predicted": 242,
+        "accuracy_eq17": 0.8717083051991897,
+        "recall": 0.6547619047619048,
+        "specificity": 0.8994668697638994,
+        "precision": 0.45454545454545453,
+        "f1": 0.5365853658536586,
+        "auroc_ovr": 0.8831782903565082
+      },
+      {
+        "label": 3,
+        "dx": "df",
+        "class_name": "Dermatofibroma (df)",
+        "malignancy": "benign",
+        "support": 20,
+        "n_predicted": 26,
+        "accuracy_eq17": 0.9905469277515192,
+        "recall": 0.8,
+        "specificity": 0.9931553730321697,
+        "precision": 0.6153846153846154,
+        "f1": 0.6956521739130435,
+        "auroc_ovr": 0.9617043121149897
+      },
+      {
+        "label": 4,
+        "dx": "mel",
+        "class_name": "Melanoma (mel)",
+        "malignancy": "malignant",
+        "support": 165,
+        "n_predicted": 463,
+        "accuracy_eq17": 0.7272113436866982,
+        "recall": 0.6787878787878788,
+        "specificity": 0.7332826747720365,
+        "precision": 0.24190064794816415,
+        "f1": 0.35668789808917195,
+        "auroc_ovr": 0.7959887630100396
+      },
+      {
+        "label": 5,
+        "dx": "nv",
+        "class_name": "Melanocytic nevus (nv)",
+        "malignancy": "benign",
+        "support": 992,
+        "n_predicted": 570,
+        "accuracy_eq17": 0.7029034436191762,
+        "recall": 0.5655241935483871,
+        "specificity": 0.9815950920245399,
+        "precision": 0.9842105263157894,
+        "f1": 0.7183098591549296,
+        "auroc_ovr": 0.9404561646546605
+      },
+      {
+        "label": 6,
+        "dx": "vasc",
+        "class_name": "Vascular lesion (vasc)",
+        "malignancy": "benign",
+        "support": 19,
+        "n_predicted": 19,
+        "accuracy_eq17": 0.9932478055367995,
+        "recall": 0.7368421052631579,
+        "specificity": 0.9965800273597811,
+        "precision": 0.7368421052631579,
+        "f1": 0.7368421052631579,
+        "auroc_ovr": 0.9846641226870185
+      }
+    ]
+  },
+  "ablation": [
+    {
+      "run_id": "v2-abl-nocorr",
+      "label": "(i) no correction",
+      "sampler": false,
+      "class_weighted_loss": false,
+      "imagenet_pretrained": true,
+      "best_epoch": 10,
+      "macro_auroc": 0.9549703208974973,
+      "macro_auroc_ci": [
+        0.9453703241435988,
+        0.9635180379782926
+      ],
+      "macro_f1": 0.6535672565413831,
+      "macro_f1_ci": [
+        0.6037286615986167,
+        0.6951163739190068
+      ],
+      "balanced_accuracy": 0.6463416866834587,
+      "overall_accuracy": 0.8203916272788656,
+      "ece_10bin": 0.04696345724510471,
+      "brier": 0.25524712986778214,
+      "mel_sensitivity": 0.4666666666666667,
+      "mel_specificity": 0.9665653495440729,
+      "df_sensitivity": 0.5,
+      "nv_accuracy_eq17": 0.9014179608372721,
+      "nv_recall": 0.9495967741935484,
+      "n": 1481,
+      "delta_auroc_vs_main_pct": -3.5132448449291727,
+      "delta_f1_vs_main_pct": -5.362305450024696
+    },
+    {
+      "run_id": "v2-abl-sampler",
+      "label": "(ii) sampler only",
+      "sampler": true,
+      "class_weighted_loss": false,
+      "imagenet_pretrained": true,
+      "best_epoch": 11,
+      "macro_auroc": 0.945283977789914,
+      "macro_auroc_ci": [
+        0.9356968365899296,
+        0.9541365247985413
+      ],
+      "macro_f1": 0.6488978054166764,
+      "macro_f1_ci": [
+        0.601733980470245,
+        0.691191636819872
+      ],
+      "balanced_accuracy": 0.6788700886665714,
+      "overall_accuracy": 0.7947332883187036,
+      "ece_10bin": 0.08410463929777179,
+      "brier": 0.31036495034927614,
+      "mel_sensitivity": 0.5333333333333333,
+      "mel_specificity": 0.9536474164133738,
+      "df_sensitivity": 0.55,
+      "nv_accuracy_eq17": 0.8804861580013504,
+      "nv_recall": 0.8810483870967742,
+      "n": 1481,
+      "delta_auroc_vs_main_pct": -2.524543208459553,
+      "delta_f1_vs_main_pct": -4.681295149839949
+    },
+    {
+      "run_id": "v2-abl-loss",
+      "label": "(iii) loss weights only",
+      "sampler": false,
+      "class_weighted_loss": true,
+      "imagenet_pretrained": true,
+      "best_epoch": 30,
+      "macro_auroc": 0.9451937736478098,
+      "macro_auroc_ci": [
+        0.9360585346365667,
+        0.9543475624220902
+      ],
+      "macro_f1": 0.6760994739222931,
+      "macro_f1_ci": [
+        0.629093589820925,
+        0.71466855570972
+      ],
+      "balanced_accuracy": 0.723650742544851,
+      "overall_accuracy": 0.7886563133018231,
+      "ece_10bin": 0.09065072419986495,
+      "brier": 0.3113537163823799,
+      "mel_sensitivity": 0.5515151515151515,
+      "mel_specificity": 0.9156534954407295,
+      "df_sensitivity": 0.9,
+      "nv_accuracy_eq17": 0.8771100607697502,
+      "nv_recall": 0.8659274193548387,
+      "n": 1481,
+      "delta_auroc_vs_main_pct": -2.515240682140355,
+      "delta_f1_vs_main_pct": -8.516274929778032
+    },
+    {
+      "run_id": "v2-main-b0",
+      "label": "(iv) sampler + loss weights (MAIN)",
+      "sampler": true,
+      "class_weighted_loss": true,
+      "imagenet_pretrained": true,
+      "best_epoch": 28,
+      "macro_auroc": 0.9214198753279624,
+      "macro_auroc_ci": [
+        0.9077193854442903,
+        0.933952703593693
+      ],
+      "macro_f1": 0.6185209839242877,
+      "macro_f1_ci": [
+        0.5754122437733608,
+        0.6572850406157773
+      ],
+      "balanced_accuracy": 0.7100298278799798,
+      "overall_accuracy": 0.6103983794733289,
+      "ece_10bin": 0.22540073608372724,
+      "brier": 0.5594854759294461,
+      "mel_sensitivity": 0.6787878787878788,
+      "mel_specificity": 0.7332826747720365,
+      "df_sensitivity": 0.8,
+      "nv_accuracy_eq17": 0.7029034436191762,
+      "nv_recall": 0.5655241935483871,
+      "n": 1481,
+      "delta_auroc_vs_main_pct": 0.0,
+      "delta_f1_vs_main_pct": 0.0
+    },
+    {
+      "run_id": "v2-abl-nopretrain",
+      "label": "(v) both, no ImageNet pretraining",
+      "sampler": true,
+      "class_weighted_loss": true,
+      "imagenet_pretrained": false,
+      "best_epoch": 28,
+      "macro_auroc": 0.8530936209859109,
+      "macro_auroc_ci": [
+        0.8368393269242844,
+        0.8692091200473148
+      ],
+      "macro_f1": 0.35782578096736434,
+      "macro_f1_ci": [
+        0.32496337922176,
+        0.39009595167393646
+      ],
+      "balanced_accuracy": 0.5665031496144763,
+      "overall_accuracy": 0.474679270762998,
+      "ece_10bin": 0.19724348749493587,
+      "brier": 0.7463533207194097,
+      "mel_sensitivity": 0.6121212121212121,
+      "mel_specificity": 0.7553191489361702,
+      "df_sensitivity": 0.6,
+      "nv_accuracy_eq17": 0.6475354490209319,
+      "nv_recall": 0.4788306451612903,
+      "n": 1481,
+      "delta_auroc_vs_main_pct": 8.009232827586688,
+      "delta_f1_vs_main_pct": 72.8553438078572
+    }
+  ],
+  "v1_reference": {
+    "macro_auroc": 0.926376249192842,
+    "macro_auroc_ci": [
+      0.9098337372320072,
+      0.9405180276997249
+    ],
+    "macro_f1": 0.6213380441343066,
+    "macro_f1_ci": [
+      0.5794641682885551,
+      0.6589961348115683
+    ],
+    "balanced_accuracy": 0.7271126179884053,
+    "overall_accuracy": 0.6218771100607697,
+    "ece_10bin": 0.22193613256583394,
+    "brier": 0.5595677634207514,
+    "mel_sensitivity": 0.7757575757575758,
+    "mel_specificity": 0.7537993920972644,
+    "df_sensitivity": 0.8,
+    "nv_accuracy_eq17": 0.7076299797434166,
+    "nv_recall": 0.5665322580645161,
+    "n": 1481
+  },
+  "checkpoints": {
+    "v2-abl-nocorr": {
+      "run_id": "v2-abl-nocorr",
+      "best_epoch": 10,
+      "selection_metric": "val_macro_f1",
+      "selection_metric_value": 0.6364230405600063,
+      "config_reference": "configs\\v2-abl-nocorr.yaml",
+      "best_checkpoint_sha256": "b925b7e6cfe29741d37f5f5759e77197f1b517b7a50ee600e03eb32b757f4898"
+    },
+    "v2-abl-sampler": {
+      "run_id": "v2-abl-sampler",
+      "best_epoch": 11,
+      "selection_metric": "val_macro_f1",
+      "selection_metric_value": 0.6400097507207703,
+      "config_reference": "configs\\v2-abl-sampler.yaml",
+      "best_checkpoint_sha256": "495201be3035eb7b2f44e2d968807ba81a13f7b7aa9bc439d7e98ea48b0b3f49"
+    },
+    "v2-abl-loss": {
+      "run_id": "v2-abl-loss",
+      "best_epoch": 30,
+      "selection_metric": "val_macro_f1",
+      "selection_metric_value": 0.6359827884975958,
+      "config_reference": "configs\\v2-abl-loss.yaml",
+      "best_checkpoint_sha256": "26b2b6e9ea0676ac7cfe2ab02e4a50ee4606dc623e6838a3d5df04af44fe4cfc"
+    },
+    "v2-main-b0": {
+      "run_id": "v2-main-b0",
+      "best_epoch": 28,
+      "selection_metric": "val_macro_f1",
+      "selection_metric_value": 0.5502356523957195,
+      "config_reference": "configs\\v2-main-b0.yaml",
+      "best_checkpoint_sha256": "c07d12fa83f07edc1376a3810937911b20cd6d3ee99c6b1f93c6f79ee28f6a7d"
+    },
+    "v2-abl-nopretrain": {
+      "run_id": "v2-abl-nopretrain",
+      "best_epoch": 28,
+      "selection_metric": "val_macro_f1",
+      "selection_metric_value": 0.3403819586342461,
+      "config_reference": "configs\\v2-abl-nopretrain.yaml",
+      "best_checkpoint_sha256": "1b8728e2e0fd07c8679b5649e4c7db6daa7dd9a6dbb5afbdcffd80d73035c11c"
+    }
+  },
+  "sanity_checks": [
+    {
+      "check": "Run (i) shows minority-class collapse (df sensitivity near 0)",
+      "value": "df sens 0.500",
+      "passed": false
+    },
+    {
+      "check": "(iv) beats (ii) and (iii) on macro F1",
+      "value": "v2-main-b0: 0.6185, v2-abl-sampler: 0.6489, v2-abl-loss: 0.6761",
+      "passed": false
+    },
+    {
+      "check": "Train loss drops sharply in first 5 epochs (paper 0.87 -> 0.15)",
+      "value": "0.8700 -> 0.2062",
+      "passed": true
+    }
+  ]
+}

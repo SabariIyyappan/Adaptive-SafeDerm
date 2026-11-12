@@ -1,0 +1,24 @@
+{
+  "checkpoint": "runs\\v2-main-b0\\best.pt",
+  "checkpoint_sha256": "c07d12fa83f07edc1376a3810937911b20cd6d3ee99c6b1f93c6f79ee28f6a7d",
+  "T": 50,
+  "seed": 42,
+  "splits": {
+    "val": {
+      "n": 1532,
+      "order_matches_split_csv": true,
+      "mean_per_pass_std": 0.016473324969410896,
+      "mean_abs_mc_mean_minus_det": 0.0028679310344159603,
+      "all_finite": true
+    },
+    "test": {
+      "n": 1481,
+      "order_matches_split_csv": true,
+      "mean_per_pass_std": 0.016081372275948524,
+      "mean_abs_mc_mean_minus_det": 0.0028237993828952312,
+      "all_finite": true
+    }
+  },
+  "verify_max_abs_diff": 0.0,
+  "batchnorm_unchanged": true
+}

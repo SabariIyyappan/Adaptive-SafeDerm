@@ -1,0 +1,74 @@
+{
+  "referral_rate_for_split": 0.3,
+  "n": 1481,
+  "iou_mean": 0.5244979932340655,
+  "iou_accepted": 0.5451210424927585,
+  "iou_referred": 0.47633109665464085,
+  "iou_correct": 0.5414600334675969,
+  "iou_incorrect": 0.49792315030319506,
+  "by_referral_rate": [
+    {
+      "referral_rate": 0.0,
+      "n_accepted": 1481,
+      "accepted_iou": 0.5244979932340655,
+      "referred_iou": NaN
+    },
+    {
+      "referral_rate": 0.05,
+      "n_accepted": 1407,
+      "accepted_iou": 0.530333946100966,
+      "referred_iou": 0.4135360245350266
+    },
+    {
+      "referral_rate": 0.1,
+      "n_accepted": 1333,
+      "accepted_iou": 0.5345278540538433,
+      "referred_iou": 0.43416147652620385
+    },
+    {
+      "referral_rate": 0.15,
+      "n_accepted": 1259,
+      "accepted_iou": 0.5355860442227703,
+      "referred_iou": 0.4616157581224468
+    },
+    {
+      "referral_rate": 0.2,
+      "n_accepted": 1185,
+      "accepted_iou": 0.5385718089605797,
+      "referred_iou": 0.46815518365325703
+    },
+    {
+      "referral_rate": 0.25,
+      "n_accepted": 1111,
+      "accepted_iou": 0.5430665639683806,
+      "referred_iou": 0.4687420957048115
+    },
+    {
+      "referral_rate": 0.3,
+      "n_accepted": 1037,
+      "accepted_iou": 0.5451210424927585,
+      "referred_iou": 0.47633109665464085
+    }
+  ],
+  "paper": {
+    "accepted": 0.61,
+    "referred": 0.41
+  },
+  "sanity_checks": [
+    {
+      "check": "Accepted-prediction IoU exceeds referred-prediction IoU",
+      "value": "0.545 vs 0.476",
+      "passed": true
+    },
+    {
+      "check": "Every test image has a ground-truth mask (coverage)",
+      "value": "1481/1481",
+      "passed": true
+    },
+    {
+      "check": "Grad-CAM target class equals predicted class for every image",
+      "value": "1481/1481",
+      "passed": true
+    }
+  ]
+}

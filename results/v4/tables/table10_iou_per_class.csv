@@ -1,0 +1,8 @@
+Class,n,IoU mean ± SD,Accepted IoU,Referred IoU,Mean CAM area,Mean mask area
+Actinic keratosis (akiec),46,0.393 ± 0.157,0.402 ± 0.154,0.316 ± 0.181,0.126,0.328
+Basal cell carcinoma (bcc),71,0.411 ± 0.152,0.421 ± 0.146,0.377 ± 0.176,0.108,0.277
+Benign keratosis (bkl),168,0.434 ± 0.164,0.445 ± 0.160,0.405 ± 0.172,0.138,0.338
+Dermatofibroma (df),20,0.364 ± 0.171,0.383 ± 0.181,0.308 ± 0.134,0.097,0.288
+Melanoma (mel),165,0.477 ± 0.170,0.509 ± 0.158,0.393 ± 0.175,0.149,0.328
+Melanocytic nevus (nv),992,0.564 ± 0.174,0.592 ± 0.157,0.507 ± 0.191,0.141,0.236
+Vascular lesion (vasc),19,0.560 ± 0.210,0.547 ± 0.209,0.787 ± nan,0.118,0.162

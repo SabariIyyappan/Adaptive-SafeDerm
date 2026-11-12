@@ -1,0 +1,8 @@
+{
+  "run_id": "v5-resnet50",
+  "best_epoch": 27,
+  "selection_metric": "val_macro_f1",
+  "selection_metric_value": 0.6245788877887667,
+  "config_reference": "configs\\v5-resnet50.yaml",
+  "best_checkpoint_sha256": "a10d8c979cf007b57b3b5f8c43fd953c0af18d3ab3ae4c3771fa3cbcd63187cb"
+}

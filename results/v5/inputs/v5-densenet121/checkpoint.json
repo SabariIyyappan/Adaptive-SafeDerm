@@ -1,0 +1,8 @@
+{
+  "run_id": "v5-densenet121",
+  "best_epoch": 24,
+  "selection_metric": "val_macro_f1",
+  "selection_metric_value": 0.6105828923624256,
+  "config_reference": "configs\\v5-densenet121.yaml",
+  "best_checkpoint_sha256": "c70578712f732991d4838becdc2d172390414fd6a1817ebd3edf8b219a1e8cad"
+}

@@ -1,0 +1,8 @@
+{
+  "run_id": "v2-abl-nocorr",
+  "best_epoch": 10,
+  "selection_metric": "val_macro_f1",
+  "selection_metric_value": 0.6364230405600063,
+  "config_reference": "configs\\v2-abl-nocorr.yaml",
+  "best_checkpoint_sha256": "b925b7e6cfe29741d37f5f5759e77197f1b517b7a50ee600e03eb32b757f4898"
+}

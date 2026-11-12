@@ -1,0 +1,21 @@
+# v5-densenet121 — V5 comparison backbone (paper §4.7 Table 7, PLAN.md §9.3)
+#
+# Identical recipe to v2-main-b0 (C9 cache, sampler + class-weighted loss,
+# augmentation, provisional Table 2 hyperparameters, 30 epochs, cosine, best
+# val macro F1); only the backbone differs, with the SAME 256-unit dropout head.
+run_id: v5-densenet121
+seed: 42
+arch: densenet121
+pretrained: true
+image_ext: png
+amp: true   # mixed precision so batch 32 fits a 6 GB laptop GPU (docs/deviations.md D-V5-2)
+
+use_sampler: true
+use_class_weights: true
+
+optimizer: adamw
+lr: 1.0e-4
+weight_decay: 1.0e-4
+batch_size: 32
+epochs: 30
+scheduler: cosine

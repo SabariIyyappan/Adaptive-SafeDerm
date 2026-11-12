@@ -1,0 +1,90 @@
+{
+  "comparison": [
+    {
+      "run_id": "v2-main-b0",
+      "Model": "EfficientNet-B0 (ours, main)",
+      "params": 4337283,
+      "trainable_params": 4337283,
+      "params_m": 4.337283,
+      "best_epoch": 28,
+      "macro_auroc": 0.9214198753279624,
+      "auroc_lo": 0.9077193854442903,
+      "auroc_hi": 0.933952703593693,
+      "macro_f1": 0.6185209839242877,
+      "f1_lo": 0.5754122437733608,
+      "f1_hi": 0.6572850406157773,
+      "balanced_accuracy": 0.7100298278799798,
+      "mel_sensitivity": 0.6787878787878788,
+      "ece_10bin": 0.22540073608372724,
+      "uncertainty": "MC Dropout (V3)"
+    },
+    {
+      "run_id": "v5-mobilenetv3",
+      "Model": "MobileNetV3-Large",
+      "params": 3219767,
+      "trainable_params": 3219767,
+      "params_m": 3.219767,
+      "best_epoch": 22,
+      "macro_auroc": 0.9132199754816587,
+      "auroc_lo": 0.899957029797181,
+      "auroc_hi": 0.9267430728035186,
+      "macro_f1": 0.5467023114254251,
+      "f1_lo": 0.5022257972567543,
+      "f1_hi": 0.5892499980904157,
+      "balanced_accuracy": 0.652609726517516,
+      "mel_sensitivity": 0.703030303030303,
+      "ece_10bin": 0.23919915989196494,
+      "uncertainty": "no"
+    },
+    {
+      "run_id": "v5-resnet50",
+      "Model": "ResNet-50",
+      "params": 24034375,
+      "trainable_params": 24034375,
+      "params_m": 24.034375,
+      "best_epoch": 27,
+      "macro_auroc": 0.9365048832126092,
+      "auroc_lo": 0.9245599070611422,
+      "auroc_hi": 0.9473829850869331,
+      "macro_f1": 0.5980618388896677,
+      "f1_lo": 0.5428580209819115,
+      "f1_hi": 0.6439733778343598,
+      "balanced_accuracy": 0.6310096537884308,
+      "mel_sensitivity": 0.7090909090909091,
+      "ece_10bin": 0.1725895116475355,
+      "uncertainty": "no"
+    },
+    {
+      "run_id": "v5-densenet121",
+      "Model": "DenseNet-121",
+      "params": 7218055,
+      "trainable_params": 7218055,
+      "params_m": 7.218055,
+      "best_epoch": 24,
+      "macro_auroc": 0.942902665754343,
+      "auroc_lo": 0.9329019964397532,
+      "auroc_hi": 0.9516610292869898,
+      "macro_f1": 0.6253480146816625,
+      "f1_lo": 0.575512860619231,
+      "f1_hi": 0.6664884255759144,
+      "balanced_accuracy": 0.706956815728434,
+      "mel_sensitivity": 0.7636363636363637,
+      "ece_10bin": 0.16329056488858879,
+      "uncertainty": "no"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "B0 is competitive with ResNet-50 at about 1/5 of its parameters",
+      "measured param ratio": "0.18",
+      "AUROC B0 - other": "-0.0151",
+      "CIs overlap": true
+    },
+    {
+      "claim": "B0 is competitive with DenseNet-121 at about 2/3 of its parameters",
+      "measured param ratio": "0.60",
+      "AUROC B0 - other": "-0.0215",
+      "CIs overlap": true
+    }
+  ]
+}

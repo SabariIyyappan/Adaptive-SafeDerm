@@ -1,0 +1,8 @@
+{
+  "run_id": "v2-abl-loss",
+  "best_epoch": 30,
+  "selection_metric": "val_macro_f1",
+  "selection_metric_value": 0.6359827884975958,
+  "config_reference": "configs\\v2-abl-loss.yaml",
+  "best_checkpoint_sha256": "26b2b6e9ea0676ac7cfe2ab02e4a50ee4606dc623e6838a3d5df04af44fe4cfc"
+}

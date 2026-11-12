@@ -1,0 +1,8 @@
+{
+  "run_id": "v5-mobilenetv3",
+  "best_epoch": 22,
+  "selection_metric": "val_macro_f1",
+  "selection_metric_value": 0.5256340725462215,
+  "config_reference": "configs\\v5-mobilenetv3.yaml",
+  "best_checkpoint_sha256": "278fa387e0ae879a29fdc61ae1a55b84a25e65639e0324724e47c278792d2e18"
+}
