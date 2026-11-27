@@ -1,0 +1,70 @@
+locked: true
+tuned_on_split: val
+tuned_at: '2026-10-28T06:01:05+00:00'
+git:
+  commit: a5afca0aa359953687fa1254bc340db919c8c550
+  branch: wb2-sabari-controller
+  dirty: true
+val_bank:
+  files_sha256:
+    val_mc_logits.npz: e2be7e07a27006004ac3108f5fafbaf38a88bb1f540bdde71561bf023b650999
+    val_det_logits.npz: 8aff273d893b2986d3c8ac5361ecf70d80d357667246f2fe404bc9a9eec3f4d2
+    val_ids.csv: 4b6bbee0a7ef71385339333f3871b4c0a14b733001620140e347f8c918c3c8db
+    val_manifest.json: 9e59739de1e68802218e1c2c56b11b993cf3c424bc81a22e9bc0620731da7567
+  checkpoint_sha256: 901a73a6a689cfb4617d3897152fcb33c73d40bbbf190978218fff4614f9ae0d
+  n_images: 1532
+  synthetic: false
+objective:
+  review_budget: 0.2
+  f1_tolerance: 0.01
+  text: 'Risk-aware: minimize val mean passes s.t. val review rate <= review_budget,
+    val accepted-mel misses / all mel <= fixed-T50+entropy-referral at the same budget,
+    val macro F1 >= T50 macro F1 - f1_tolerance; ties -> fewer mel misses, lower review.
+    Variance comparator: minimize val mean passes s.t. macro F1 constraint; referral
+    threshold refers the top review_budget by final entropy.'
+fixed_T50_referral:
+  referral_entropy: 0.6551474412515402
+variance_adaptive:
+  eps_p: 0.075
+  eps_var: 0.002
+  referral_entropy: 0.6548188147684323
+  min_passes: 10
+risk_aware_adaptive:
+  tau_s: 0.3
+  h_lo: 0.05
+  h_hi: 0.9
+  margin: 0.05
+  delta_h: 0.1
+  min_passes: 10
+  min_passes_high: 20
+val_selection:
+  risk_aware_feasible: true
+  T50:
+    macro_f1: 0.5822379594006775
+    macro_auroc: 0.9271189832016135
+    passes_mean: 50.0
+    review_rate: 0.0
+    mel_miss_all: 0.2411764705882353
+    mel_missed_accepted: 41
+    mel_total: 170
+  T50_referral:
+    macro_f1: 0.5822379594006775
+    macro_auroc: 0.9271189832016135
+    passes_mean: 50.0
+    review_rate: 0.19973890339425587
+    mel_miss_all: 0.13529411764705881
+    mel_missed_accepted: 23
+    mel_total: 170
+  risk_aware:
+    macro_f1: 0.5810396844296392
+    macro_auroc: 0.9270616948234071
+    passes_mean: 19.39947780678851
+    review_rate: 0.13642297650130547
+    mel_miss_all: 0.12941176470588237
+    mel_missed_accepted: 22
+    mel_total: 170
+  grid_size: 2306
+calibration:
+  calibration_id: wb2-mc-v1b0-s42-temp-val
+  temperature: 2.0068880859164864
+  applied_to: per_pass_logits_before_softmax

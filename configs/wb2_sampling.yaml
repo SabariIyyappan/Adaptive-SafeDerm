@@ -1,0 +1,20 @@
+# wb2-mc-v1b0-s42 — Member A WB2 sampling run (implementation.md §3 A2-A4).
+#
+# Reuses Sai's V1 checkpoint unchanged (docs/wb2_checkpoint_handoff.md);
+# only the head Dropout(0.3) is stochastic. T=10/20 are prefixes of this one
+# 50-pass bank, never sampled separately.
+run_id: wb2-mc-v1b0-s42
+checkpoint: runs/v1-b0-baseline/best.pt
+expected_checkpoint_sha256: 901a73a6a689cfb4617d3897152fcb33c73d40bbbf190978218fff4614f9ae0d
+split_dir: data/splits
+images_dir: data/raw/images
+out_dir: results/wb2/inputs/wb2-mc-v1b0-s42
+shard_dir: runs/wb2-mc-v1b0-s42/shards   # git-ignored resume cache
+
+seed: 42
+n_passes: 50
+feature_reuse: true    # 1 backbone pass + 50 head passes per image
+batch_size: 64
+shard_size: 256
+num_workers: 0
+device: auto           # cuda > mps > cpu

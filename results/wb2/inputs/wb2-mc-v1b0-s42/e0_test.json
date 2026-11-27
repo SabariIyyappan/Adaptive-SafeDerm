@@ -1,0 +1,11 @@
+{
+  "split": "test",
+  "n_images": 1481,
+  "labels_match": true,
+  "argmax_agreement": 0.9993247805536799,
+  "argmax_disagreements": 1,
+  "max_abs_prob_diff": 0.006963575879220141,
+  "mean_abs_prob_diff": 0.00012252382926024113,
+  "tolerance": 0.001,
+  "within_tolerance": false
+}
